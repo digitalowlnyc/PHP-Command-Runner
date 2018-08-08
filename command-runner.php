@@ -12,6 +12,10 @@
  * 
  */
 
+    set_error_handler(function($errno, $errstr, $errfile, $errline) {
+        throw new ErrorException($errstr, $errno, 1, $errfile, $errline);
+    });
+
 	if(!file_exists($argv[1])) {
 		echo "File does not exist: " . $argv[1] . PHP_EOL;
 		exit(1);
@@ -91,8 +95,8 @@
 
     $commandIndex = $commandIndexToRun - 1;
 
-    if($commandIndex < 0) {
-        throw new RuntimeException("Invalid command number: " . $commandIndexToRun);
+    if($commandIndex < 0 || $commandIndex > count($commands)) {
+        throw new RuntimeException("Invalid command number: " . $commandIndexToRun . ", valid values are " . "1 to " . count($commands));
     }
 
     $commandsSelectedToRun = [$commands[$commandIndex]];
